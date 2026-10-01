@@ -1,0 +1,38 @@
+# Production stack: Slotback behind Caddy (automatic HTTPS certificates).
+# 1. cp .env.example .env and fill it in (at minimum SLOTBACK_DOMAIN and SLOTBACK_ENCRYPTION_KEY)
+# 2. docker compose up -d
+# 3. docker compose exec app node src/server/cli.ts create-user admin --role admin
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      SLOTBACK_ENV: production
+      SLOTBACK_PUBLIC_URL: https://${SLOTBACK_DOMAIN:?set SLOTBACK_DOMAIN in .env}
+      SLOTBACK_TRUST_PROXY: "true"
+      SLOTBACK_DATABASE: /app/data/slotback.db
+    volumes:
+      - slotback-data:/app/data
+    expose:
+      - "8080"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SLOTBACK_DOMAIN: ${SLOTBACK_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - app
+
+volumes:
+  slotback-data:
+  caddy-data:
+  caddy-config:

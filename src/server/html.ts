@@ -61,7 +61,7 @@ export function layout(o: LayoutOptions): SafeHtml {
 <body class="${o.narrow ? 'narrow' : ''}">
 ${o.devBanner ? html`<div class="dev-banner">Development mode: synthetic data only — never enter real patient information.</div>` : ''}
 <header class="top">
-  <div class="brand"><span class="logo" aria-hidden="true"></span>${o.practiceName ?? 'Slotback'}</div>
+  <div class="brand"><svg class="logo" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="5" y="6" width="16" height="3" rx="1" fill="currentColor" opacity=".25"/><rect x="4" y="11.5" width="18" height="4" rx="1" fill="#ffd43b"/><rect x="5" y="18" width="16" height="3" rx="1" fill="currentColor" opacity=".25"/></svg>${o.practiceName ?? 'Slotback'}</div>
   ${
     o.nav
       ? html`<nav>${o.nav.map(

@@ -332,7 +332,7 @@ export function staffRoutes(router: Router, app: App) {
         <div class="stat"><span class="n">${active}</span><span>patients waiting</span></div>
         <div class="stat"><span class="n">${live.length}</span><span>openings in progress</span></div>
         <div class="stat"><span class="n">${filled.length}</span><span>slots filled (30 days)${fillRate !== undefined ? ` · ${fillRate}% fill rate` : ''}</span></div>
-        <div class="stat ${pending + tasks ? 'warn' : ''}"><span class="n">${pending + tasks}</span><span>need staff (${pending} requests, ${tasks} tasks)</span></div>
+        <div class="stat ${pending + tasks ? 'warn' : ''}"><span class="n">${pending + tasks}</span><span>need staff (${pending} request${pending === 1 ? '' : 's'}, ${tasks} task${tasks === 1 ? '' : 's'})</span></div>
       </div>
       <section class="card">
         <div class="card-head"><h2>Openings being filled</h2><a class="button" href="/staff/openings#post">Post an opening</a></div>
@@ -452,7 +452,9 @@ export function staffRoutes(router: Router, app: App) {
     const boost = Math.max(-200, Math.min(200, Math.round(Number(form.get('boost')) || 0)));
     app.run(staffActor(ctx), (e, now) => e.updateEntry(ctx.params.id, { acuity: acuity as Acuity, boost, pinned: form.get('pinned') === '1' }, now));
     const back = form.get('back') ?? '';
-    redirect(ctx, `${back.startsWith('/staff/waitlist') ? back.replace(/[?&]ok=[^&]*/, '') : '/staff/waitlist'}${back.includes('?') ? '&' : '?'}ok=saved`);
+    const target = new URL(back.startsWith('/staff/waitlist') ? back : '/staff/waitlist', 'http://x');
+    target.searchParams.set('ok', 'saved');
+    redirect(ctx, target.pathname + target.search);
   });
 
   // --------------------------------------------------------------- requests
@@ -689,6 +691,7 @@ export function staffRoutes(router: Router, app: App) {
     const start = localToInstant(date, time, p.timeZone);
     if (start.getTime() <= Date.now()) throw new HttpError(400, 'That time has already passed.');
     const modality = form.get('modality') === 'telehealth' ? 'telehealth' : 'in_person';
+    if (!p.providers.some((x) => x.id === form.get('providerId'))) throw new HttpError(400, 'Choose a provider.');
     const res = app.ingestFreedSlot(staffActor(ctx), {
       providerId: form.get('providerId') ?? '',
       start: start.toISOString(),

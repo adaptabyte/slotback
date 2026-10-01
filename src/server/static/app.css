@@ -1,12 +1,14 @@
 :root {
-  --bg: #f6f7f9;
+  --bg: #f2f5f4;
   --surface: #ffffff;
   --text: #1b2430;
   --muted: #5d6b7a;
   --line: #e2e6eb;
-  --brand: #0f766e;
+  --brand: #1f47b8;
   --brand-ink: #ffffff;
-  --brand-soft: #e6f4f2;
+  --brand-soft: #e7edfb;
+  --mark: #ffe066;
+  --mark-ink: #2b2300;
   --warn: #b45309;
   --warn-soft: #fef3c7;
   --bad: #b91c1c;
@@ -20,14 +22,16 @@
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0f141a;
-    --surface: #171e26;
+    --bg: #0d1417;
+    --surface: #142027;
     --text: #e6ebf0;
     --muted: #9aa8b6;
     --line: #2a3440;
-    --brand: #2dd4bf;
-    --brand-ink: #062a26;
-    --brand-soft: #123532;
+    --brand: #93b2ff;
+    --brand-ink: #0b1736;
+    --brand-soft: #1a2747;
+    --mark: #ecc94b;
+    --mark-ink: #221b00;
     --warn-soft: #3a2a0c;
     --bad-soft: #3b1515;
     --good-soft: #10301d;
@@ -58,7 +62,7 @@ header.top {
   background: var(--surface); border-bottom: 1px solid var(--line); flex-wrap: wrap;
 }
 .brand { font-weight: 650; display: flex; align-items: center; gap: 0.5rem; }
-.logo { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, var(--brand), #6366f1); display: inline-block; }
+.logo { width: 22px; height: 22px; flex: none; }
 header nav { display: flex; gap: 0.25rem; flex-wrap: wrap; flex: 1; }
 header nav a { text-decoration: none; color: var(--muted); padding: 0.35rem 0.7rem; border-radius: 8px; }
 header nav a:hover { background: var(--bg); color: var(--text); }
@@ -99,7 +103,8 @@ body.narrow main { max-width: 720px; }
 .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.15em 0.6em; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--text); white-space: nowrap; }
 .s-active, .s-confirmed, .s-filled, .s-accepted, .s-booked { background: var(--good-soft); }
 .s-offering, .s-offered, .s-pending, .s-booking, .s-requested { background: var(--info-soft); }
-.s-pending_review, .s-needs_attention, .s-open { background: var(--warn-soft); }
+.s-pending_review, .s-needs_attention { background: var(--warn-soft); }
+.s-open, .s-new { background: var(--mark); color: var(--mark-ink); border-color: transparent; }
 .s-failed, .s-expired, .s-removed { background: var(--bad-soft); }
 
 details.score summary { cursor: pointer; font-weight: 700; color: var(--brand); }
@@ -115,6 +120,9 @@ ol.ranked li { padding: 0.3rem 0; }
 form.inline-rank { display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap; }
 form.inline-rank input[type=number] { width: 70px; }
 .filters { margin-bottom: 0.5rem; }
+.filters label { display: inline-flex; }
+.filters select { width: auto; min-width: 220px; }
+.row.compact > label { flex: 1 1 130px; }
 .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
 fieldset { border: 0; padding: 0; margin: 0 0 1.5rem; }

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Slotback Pricing · Waitlist software from $0 self-hosted or $49 per provider</title>
+<meta name="description" content="Slotback pricing is on the page: free to self-host, $49 per provider per month hosted with a BAA, texts and setup included, $39 for groups of 10+. No contracts. Calculate what filling cancellations is worth to your practice.">
+<link rel="canonical" href="{{SITE_URL}}/pricing.html">
+<meta property="og:title" content="Slotback pricing: $0 self-hosted, $49 per provider hosted">
+<meta property="og:description" content="Clear per-provider pricing with the BAA, messaging and setup included. No contracts.">
+<meta property="og:url" content="{{SITE_URL}}/pricing.html">
+{{> head}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Slotback",
+  "description": "Automatic waitlist and cancellation backfill for medical and psychiatric practices.",
+  "offers": [
+    { "@type": "Offer", "name": "Self-hosted", "price": "0", "priceCurrency": "USD" },
+    { "@type": "Offer", "name": "Practice", "price": "49", "priceCurrency": "USD", "description": "Per provider per month, hosted, BAA included" },
+    { "@type": "Offer", "name": "Group (10+ providers)", "price": "39", "priceCurrency": "USD", "description": "Per provider per month, hosted, BAA and EHR interface setup included" }
+  ]
+}
+</script>
+</head>
+<body>
+{{> header pricing}}
+<main id="main">
+  <div class="wrap page-hero">
+    <span class="eyebrow">Pricing</span>
+    <h1>One price per provider. Everything included.</h1>
+    <p class="lede">The BAA, text messages, every integration and setup are part of the plan. Month to month, no setup fee for calendar-based setups, and your data leaves with you if you go.</p>
+  </div>
+
+  <section class="band" style="padding-top:1.5rem">
+    <div class="wrap">
+      <div class="plans">
+        <article class="plan" aria-labelledby="p-self">
+          <span class="tag">Your servers</span>
+          <h2 id="p-self" style="font-size:1.4rem">Self-hosted</h2>
+          <div class="price">$0 <small>forever</small></div>
+          <div style="display:grid; gap:0.9rem; align-content:start">
+            <p class="who">For practices with IT staff or a managed IT partner.</p>
+            <ul>
+              <li>The full product with every integration</li>
+              <li>Runs with Docker on your own HIPAA-eligible server or cloud account</li>
+              <li>Patient data never reaches us, so you need no BAA with us</li>
+              <li>You connect your own texting (for example Twilio under its BAA) and email</li>
+              <li>Community support through the public issue tracker</li>
+            </ul>
+          </div>
+          <a class="btn ghost" href="implementation.html#self-host">Read the self-hosting guide</a>
+        </article>
+
+        <article class="plan featured" aria-labelledby="p-practice">
+          <span class="tag">Most practices</span>
+          <h2 id="p-practice" style="font-size:1.4rem">Practice</h2>
+          <div class="price">$49 <small>per provider / month</small></div>
+          <div style="display:grid; gap:0.9rem; align-content:start">
+            <p class="who">Hosted by us. For 1 to 9 providers.</p>
+            <ul>
+              <li>Signed Business Associate Agreement</li>
+              <li>A dedicated, encrypted instance for your practice only</li>
+              <li>Texts and email included: 500 messages per provider per month, then $0.02 each</li>
+              <li>Calendar feed, FHIR, HL7 and API connections</li>
+              <li>Guided setup call and onboarding</li>
+              <li>Email support with a reply within one business day</li>
+            </ul>
+          </div>
+          <a class="btn" href="mailto:{{CONTACT_EMAIL}}?subject=Slotback%20pilot%20(Practice%20plan)">Start a 30-day pilot</a>
+        </article>
+
+        <article class="plan" aria-labelledby="p-group">
+          <span class="tag">10+ providers</span>
+          <h2 id="p-group" style="font-size:1.4rem">Group</h2>
+          <div class="price">$39 <small>per provider / month</small></div>
+          <div style="display:grid; gap:0.9rem; align-content:start">
+            <p class="who">Everything in Practice, for larger groups and multi-site clinics.</p>
+            <ul>
+              <li>EHR interface (FHIR or HL7) set up by us at no charge</li>
+              <li>Priority support with a reply within 4 business hours</li>
+              <li>Quarterly review of fill rate and waitlist health</li>
+              <li>Volume pricing applies to every provider, starting with the first</li>
+            </ul>
+          </div>
+          <a class="btn ghost" href="mailto:{{CONTACT_EMAIL}}?subject=Slotback%20pilot%20(Group%20plan)">Start a 30-day pilot</a>
+        </article>
+      </div>
+
+      <div class="table-wrap" style="margin-top:2rem">
+        <table class="data">
+          <caption class="small" style="text-align:left; padding:0.9rem 1rem 0">Everything else, spelled out</caption>
+          <tbody>
+            <tr><td>Who counts as a provider</td><td>Anyone with a schedule Slotback fills: physicians, NPs, PAs, psychologists, therapists. Front-desk and admin accounts are free and unlimited.</td></tr>
+            <tr><td>Setup fee</td><td>None for calendar-feed, API or manual setups. An EHR interface (FHIR or HL7) is $750 once on the Practice plan and included on Group.</td></tr>
+            <tr><td>Contract</td><td>Month to month. Annual billing gets two months free.</td></tr>
+            <tr><td>Pilot</td><td>Every hosted plan starts with a 30-day pilot on your real schedule. Cancel during the pilot and you pay nothing.</td></tr>
+            <tr><td>Leaving</td><td>Export your waitlist any time. When you cancel we delete your instance and backups within 30 days and confirm in writing.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="band sheet" id="calculator">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Savings calculator</span>
+        <h2>What filling cancellations is worth to you</h2>
+        <p class="lede">Enter your own numbers. Results depend on your specialty, waitlist size and how much notice cancellations give, so treat this as an estimate.</p>
+      </div>
+      <div class="calc">
+        <form id="calc" novalidate>
+          <div class="field"><label for="c-providers">Providers</label><input id="c-providers" type="number" min="1" max="500" value="3" inputmode="numeric"></div>
+          <div class="field"><label for="c-cancels">Cancellations per provider per week</label><input id="c-cancels" type="number" min="0" max="100" step="0.5" value="4"><span class="hint">Late cancellations and reschedules that leave a gap.</span></div>
+          <div class="field"><label for="c-today">Share you refill today (%)</label><input id="c-today" type="number" min="0" max="100" value="20"></div>
+          <div class="field"><label for="c-with">Share you expect to refill with Slotback (%)</label><input id="c-with" type="number" min="0" max="100" value="55"><span class="hint">Practices with an active waitlist and auto-booking fill the most.</span></div>
+          <div class="field"><label for="c-revenue">Average revenue per visit ($)</label><input id="c-revenue" type="number" min="0" max="5000" value="180"></div>
+        </form>
+        <div class="calc-out" aria-live="polite">
+          <div class="row"><span>Extra visits per month</span><b id="o-visits">—</b></div>
+          <div class="row"><span>Recovered revenue per month</span><b id="o-revenue">—</b></div>
+          <div class="row"><span>Slotback hosted cost per month</span><b id="o-cost">—</b></div>
+          <div class="row total"><span>Net per month</span><b id="o-net">—</b></div>
+          <p class="small" id="o-note" style="margin-top:0.6rem"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="pricing-faq">
+    <div class="wrap">
+      <div class="section-head"><span class="eyebrow">Billing questions</span><h2>Before you ask</h2></div>
+      <div class="faq prose">
+        <details><summary>Why is self-hosting free?</summary><div><p>Because a waitlist shouldn't depend on one vendor. If you run it yourself, you carry the hosting and compliance work, so we don't charge for the software. Most practices prefer the hosted plan so they don't have to run servers.</p></div></details>
+        <details><summary>What happens if we send more than 500 messages per provider?</summary><div><p>Additional texts and emails are $0.02 each, billed the following month. Most practices stay well under the included amount because a single offer usually fills a slot.</p></div></details>
+        <details><summary>Do patients pay anything?</summary><div><p>No. Patients never pay and never need an account or an app.</p></div></details>
+        <details><summary>Can we switch between hosted and self-hosted?</summary><div><p>Yes. It's the same software. We'll export your data to your own instance or import it into ours.</p></div></details>
+      </div>
+    </div>
+  </section>
+</main>
+{{> footer}}
+<script src="assets/pricing.js" defer></script>
+</body>
+</html>

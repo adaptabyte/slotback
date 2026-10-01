@@ -12,7 +12,8 @@ import { entryFormFields, parseEntryForm } from '../views.ts';
 
 /** Public pages: waitlist request form and the secure links patients receive by text/email. */
 export function patientRoutes(router: Router, app: App) {
-  const joinLimiter = new RateLimiter(5, 60 * 60000);
+  // Generous enough for a clinic's shared waiting-room network, tight enough to stop scripted abuse.
+  const joinLimiter = new RateLimiter(20, 60 * 60000);
   const tokenLimiter = new RateLimiter(60, 10 * 60000);
   const dev = app.config.env !== 'production';
 

@@ -152,10 +152,10 @@ export function entryFormFields(
       <label>Visit type<select name="appointmentType" required>
         ${types.map((t) => opt(t.id, `${t.name} (${t.durationMinutes} min)`, entry?.appointmentType === t.id))}
       </select></label>
-      <div class="field"><span class="label">How</span>
+      <div class="field"><span class="label">How</span><div class="checks">
         <label class="check"><input type="checkbox" name="modality" value="in_person" ${modalities.includes('in_person') ? 'checked' : ''}> In person</label>
         <label class="check"><input type="checkbox" name="modality" value="telehealth" ${modalities.includes('telehealth') ? 'checked' : ''}> Telehealth</label>
-      </div>
+      </div></div>
     </div>
     ${
       providers.length > 1
@@ -179,7 +179,7 @@ export function entryFormFields(
     <legend>${mode === 'patient' ? 'When can you come in?' : 'Availability'}</legend>
     <p class="hint">Check every time you could make on short notice. More times = sooner match.</p>
     ${availabilityGrid(practice, entry?.availability?.weekly ?? [])}
-    <div class="row">
+    <div class="row compact">
       <label>Notice needed<select name="minNotice">
         ${NOTICE_OPTIONS.map(([m, l]) => opt(String(m), l, (entry?.availability?.minNoticeMinutes ?? 180) === m))}
       </select></label>

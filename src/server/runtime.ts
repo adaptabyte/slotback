@@ -44,8 +44,9 @@ export class App {
   readonly devInbox?: ConsoleChannel;
   readonly fhir?: FhirClient;
   private practiceCache?: PracticeSettings;
-  private processing = false;
+  private inflight?: Promise<void>;
   private kicked = false;
+  private rerun = false;
   private timers: NodeJS.Timeout[] = [];
   readonly log: (msg: string) => void;
 
@@ -205,6 +206,10 @@ export class App {
   // ----------------------------------------------------------------- outbox
 
   kick() {
+    if (this.inflight) {
+      this.rerun = true;
+      return;
+    }
     if (this.kicked) return;
     this.kicked = true;
     setImmediate(() => {
@@ -213,31 +218,43 @@ export class App {
     });
   }
 
-  /** Executes due commands; transient failures retry with backoff, then fall back to staff. */
-  async processOutbox(now = new Date()): Promise<void> {
-    if (this.processing) return;
-    this.processing = true;
-    try {
-      for (let round = 0; round < 10; round++) {
-        const due = this.db.dueOutbox(now);
-        if (!due.length) break;
-        for (const item of due) {
-          try {
-            await this.execute(item.command);
-            this.db.finishOutbox(item.id);
-          } catch (err) {
-            const attempts = item.attempts + 1;
-            const dead = attempts >= MAX_ATTEMPTS;
-            const message = err instanceof Error ? err.message : String(err);
-            const next = new Date(Date.now() + BACKOFF_SECONDS[Math.min(attempts - 1, BACKOFF_SECONDS.length - 1)] * 1000);
-            this.db.retryOutbox(item.id, attempts, next, message, dead);
-            this.log(`outbox #${item.id} ${item.command.type} failed (attempt ${attempts}): ${message}`);
-            if (dead) this.onDead(item.command, message);
-          }
+  /**
+   * Executes due commands; transient failures retry with backoff, then fall back to staff.
+   * Concurrent calls share the drain in progress (and schedule one more pass after it).
+   */
+  processOutbox(): Promise<void> {
+    if (this.inflight) {
+      this.rerun = true;
+      return this.inflight;
+    }
+    this.inflight = this.drain().finally(() => {
+      this.inflight = undefined;
+      if (this.rerun) {
+        this.rerun = false;
+        this.kick();
+      }
+    });
+    return this.inflight;
+  }
+
+  private async drain(): Promise<void> {
+    for (let round = 0; round < 10; round++) {
+      const due = this.db.dueOutbox(new Date());
+      if (!due.length) break;
+      for (const item of due) {
+        try {
+          await this.execute(item.command);
+          this.db.finishOutbox(item.id);
+        } catch (err) {
+          const attempts = item.attempts + 1;
+          const dead = attempts >= MAX_ATTEMPTS;
+          const message = err instanceof Error ? err.message : String(err);
+          const next = new Date(Date.now() + BACKOFF_SECONDS[Math.min(attempts - 1, BACKOFF_SECONDS.length - 1)] * 1000);
+          this.db.retryOutbox(item.id, attempts, next, message, dead);
+          this.log(`outbox #${item.id} ${item.command.type} failed (attempt ${attempts}): ${message}`);
+          if (dead) this.onDead(item.command, message);
         }
       }
-    } finally {
-      this.processing = false;
     }
   }
 

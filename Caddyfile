@@ -1,0 +1,6 @@
+# Caddy obtains and renews TLS certificates automatically and redirects HTTP to HTTPS.
+# Access logging is deliberately left off: patient links carry one-time tokens in their URLs.
+{$SLOTBACK_DOMAIN} {
+	encode gzip
+	reverse_proxy app:8080
+}

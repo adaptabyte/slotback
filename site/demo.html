@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Slotback Live Demo · Watch a cancellation get filled from the waitlist</title>
+<meta name="description" content="Try Slotback in your browser: cancel an appointment and watch the waitlist engine rank patients by acuity, auto-book or offer the slot, write it to the EHR, text the patient, and re-offer the slot they vacated. Synthetic data only.">
+<link rel="canonical" href="{{SITE_URL}}/demo.html">
+<meta property="og:title" content="Slotback live demo: watch a cancellation get filled">
+<meta property="og:description" content="Cancel an appointment and watch the real engine fill it from a clinician-prioritized waitlist.">
+<meta property="og:url" content="{{SITE_URL}}/demo.html">
+{{> head}}
+<link rel="stylesheet" href="assets/demo.css">
+<script type="module" src="assets/demo.js"></script>
+</head>
+<body>
+{{> header demo}}
+<main id="main" class="demo">
+  <div class="wrap demo-top">
+    <div class="demo-title">
+      <span class="eyebrow">Live demo · runs entirely in your browser</span>
+      <h1>Cancel an appointment. Watch it get filled.</h1>
+      <p class="lede">This is the real Slotback matching engine with made-up patients at a fictional psychiatry practice. Nothing you do here leaves your browser.</p>
+    </div>
+    <div class="clockbar" role="group" aria-label="Simulation controls">
+      <div class="clock"><span class="eyebrow">Practice time</span><strong id="clock">—</strong></div>
+      <button class="btn small ghost" data-action="advance" data-minutes="15" type="button">+15 min</button>
+      <button class="btn small ghost" data-action="advance" data-minutes="60" type="button">+1 hour</button>
+      <label class="privacy"><input type="checkbox" id="privacy-minimal" data-action="privacy"> Minimal-detail texts</label>
+      <button class="btn small ghost" data-action="reset" type="button">Reset</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="tour" id="tour" aria-live="polite"></section>
+  </div>
+
+  <div class="wrap demo-grid">
+    <section class="panel cal-panel" aria-labelledby="cal-h">
+      <div class="panel-head">
+        <h2 id="cal-h">Schedule</h2>
+        <div class="tabs" role="tablist" aria-label="Provider" id="provider-tabs"></div>
+      </div>
+      <div class="cal-scroll"><div class="cal" id="calendar"></div></div>
+      <div class="later" id="later"></div>
+      <p class="legend"><span class="sw sw-appt"></span> Booked <span class="sw sw-moved"></span> Moved up by Slotback <span class="sw sw-open"></span> Open slot being filled · Click <b>✕</b> on any appointment to cancel it.</p>
+    </section>
+
+    <section class="panel phone-panel" aria-labelledby="phone-h">
+      <div class="panel-head"><h2 id="phone-h">Patients' phones</h2><span class="small" id="phone-count"></span></div>
+      <div class="phone" id="phone"></div>
+    </section>
+
+    <section class="panel wl-panel" aria-labelledby="wl-h">
+      <div class="panel-head"><h2 id="wl-h">Waitlist</h2><button class="btn small ghost" type="button" data-action="toggle-add" aria-expanded="false" aria-controls="add-form">Add a patient</button></div>
+      <form id="add-form" class="add-form" hidden></form>
+      <p class="small">Ranked by priority score. Change acuity, booking mode or pin someone and the order updates instantly. Click a score for its breakdown.</p>
+      <div id="waitlist"></div>
+    </section>
+
+    <section class="panel pipe-panel" aria-labelledby="pipe-h">
+      <div class="panel-head"><h2 id="pipe-h">Pipeline</h2><span class="small">newest first</span></div>
+      <div id="decision"></div>
+      <ol class="pipeline" id="pipeline"></ol>
+    </section>
+  </div>
+
+  <div class="wrap demo-after">
+    <div class="cta-row"><a class="btn" href="pricing.html">See pricing</a><a class="btn ghost" href="implementation.html">How setup works</a><a class="btn ghost" href="security.html">HIPAA &amp; security</a></div>
+  </div>
+  <noscript><div class="wrap"><p class="callout">The demo needs JavaScript. Everything else on this site works without it.</p></div></noscript>
+</main>
+{{> footer}}
+</body>
+</html>

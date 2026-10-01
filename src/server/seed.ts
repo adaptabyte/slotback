@@ -23,7 +23,7 @@ export function seedDemo(app: App): { username: string; password: string } | und
     engine: { ...DEFAULT_PRACTICE.engine, offers: { ...DEFAULT_PRACTICE.engine.offers, quietHours: undefined } },
     providers: [
       { id: 'dr_lee', name: 'Dr. Maya Lee, MD', defaultModality: 'in_person', locationId: 'main', active: true },
-      { id: 'np_ortiz', name: 'Jordan Ortiz, PMHNP', defaultModality: 'telehealth', active: true },
+      { id: 'np_ortiz', name: 'Alex Ortiz, PMHNP', defaultModality: 'telehealth', active: true },
       { id: 'dr_chen', name: 'Dr. Sam Chen, PsyD', defaultModality: 'in_person', locationId: 'main', active: true },
     ],
     locations: [{ id: 'main', name: 'Riverbend — 120 Main St' }],
@@ -68,7 +68,7 @@ export function seedDemo(app: App): { username: string; password: string } | und
     { first: 'Avery', last: 'Thompson', type: 'new_eval', minutes: 60, acuity: 5, mode: 'auto', providers: ['dr_lee'], modalities: ['in_person', 'telehealth'], windows: weekdays([1, 2, 3, 4, 5], '08:00', '17:00'), waitingDays: 6, current: appt(41, '09:00', 'dr_lee', 60, 'in_person') },
     { first: 'Jordan', last: 'Patel', type: 'med_mgmt', minutes: 30, acuity: 3, mode: 'confirm', providers: [], modalities: ['telehealth'], windows: weekdays([1, 3, 5], '12:00', '17:00'), waitingDays: 18, current: appt(23, '14:00', 'np_ortiz', 30, 'telehealth') },
     { first: 'Riley', last: 'Nguyen', type: 'new_eval', minutes: 60, acuity: 4, mode: 'confirm', providers: ['dr_lee', 'dr_chen'], modalities: ['in_person'], windows: weekdays([2, 4], '08:00', '12:00'), waitingDays: 25 },
-    { first: 'Casey', last: 'Morgan', type: 'therapy', minutes: 50, acuity: 2, mode: 'auto', providers: ['dr_chen'], modalities: ['in_person', 'telehealth'], windows: weekdays([1, 2, 3, 4, 5], '12:00', '20:00'), waitingDays: 40, current: appt(30, '16:00', 'dr_chen', 50, 'in_person') },
+    { first: 'Casey', last: 'Brennan', type: 'therapy', minutes: 50, acuity: 2, mode: 'auto', providers: ['dr_chen'], modalities: ['in_person', 'telehealth'], windows: weekdays([1, 2, 3, 4, 5], '12:00', '20:00'), waitingDays: 40, current: appt(30, '16:00', 'dr_chen', 50, 'in_person') },
     { first: 'Taylor', last: 'Brooks', type: 'med_mgmt', minutes: 30, acuity: 1, mode: 'confirm', providers: [], modalities: ['in_person', 'telehealth'], windows: weekdays([1, 2, 3, 4, 5], '08:00', '20:00'), waitingDays: 9, current: appt(16, '10:30', 'dr_lee', 30, 'in_person') },
     { first: 'Morgan', last: 'Reyes', type: 'new_eval', minutes: 60, acuity: 3, mode: 'auto', providers: [], modalities: ['telehealth'], windows: weekdays([1, 2, 3, 4, 5], '08:00', '12:00'), waitingDays: 33 },
     { first: 'Quinn', last: 'Foster', type: 'therapy', minutes: 50, acuity: 4, mode: 'confirm', providers: ['dr_chen'], modalities: ['in_person'], windows: weekdays([1, 3], '08:00', '17:00'), waitingDays: 12 },

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Slotback · Automatic waitlist &amp; cancellation fill for medical and psychiatric practices</title>
+<meta name="description" content="Slotback fills cancelled appointments automatically. Patients join a waitlist, clinicians prioritize by acuity, and the right patient is booked and texted the moment a slot opens. Works with any EHR or calendar. HIPAA-ready, BAA available.">
+<link rel="canonical" href="{{SITE_URL}}/">
+<meta property="og:title" content="Slotback: cancelled appointments, filled automatically">
+<meta property="og:description" content="A clinician-prioritized waitlist that books the right patient into every opening, in any EHR or calendar. HIPAA-ready.">
+<meta property="og:url" content="{{SITE_URL}}/">
+{{> head}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Slotback",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Web",
+  "description": "Automatic waitlist and cancellation backfill for medical and psychiatric practices. Clinician-set acuity prioritization, auto-booking or offer-and-hold, works with any EHR or calendar.",
+  "url": "{{SITE_URL}}/",
+  "offers": [
+    { "@type": "Offer", "name": "Self-hosted", "price": "0", "priceCurrency": "USD" },
+    { "@type": "Offer", "name": "Practice (hosted)", "price": "49", "priceCurrency": "USD", "description": "Per provider per month" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Is Slotback HIPAA compliant?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Slotback is built for HIPAA compliance: patient data is encrypted at rest and in transit, every access is recorded in a tamper-evident audit log, staff sign in with two-factor authentication, and texts can be sent in a minimal-disclosure mode. On the hosted plan we sign a Business Associate Agreement. If you self-host, patient data never reaches us at all." } },
+    { "@type": "Question", "name": "Which EHRs and calendars does Slotback work with?", "acceptedAnswer": { "@type": "Answer", "text": "Any. Slotback detects openings from calendar feeds (Google, Microsoft 365, Apple and EHRs that publish iCal feeds), FHIR R4, HL7 v2 SIU messages, a REST API, or staff posting them. It writes bookings back through FHIR, a webhook, or a one-click task for your front desk." } },
+    { "@type": "Question", "name": "Can a patient be booked without agreeing?", "acceptedAnswer": { "@type": "Answer", "text": "Only if they chose 'book me automatically' when joining the waitlist. Everyone else gets an offer they can accept or decline, held for them for a set time." } },
+    { "@type": "Question", "name": "How much does Slotback cost?", "acceptedAnswer": { "@type": "Answer", "text": "Self-hosted is free. The hosted Practice plan is $49 per provider per month with a BAA, messaging and setup included. Groups of 10 or more providers pay $39 per provider per month." } }
+  ]
+}
+</script>
+</head>
+<body>
+{{> header how}}
+<main id="main">
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">For medical &amp; psychiatric practices</span>
+      <h1>Cancelled appointments, <span class="mark">filled automatically.</span></h1>
+      <p class="lede">Patients join your waitlist and tick the times they can make. Clinicians rank them by acuity. When a slot opens in your EHR or calendar, Slotback books the right patient and texts them. Nobody makes a phone call.</p>
+      <div class="cta-row">
+        <a class="btn" href="demo.html">Try the live demo</a>
+        <a class="btn ghost" href="pricing.html">See pricing</a>
+      </div>
+      <ul class="trust">
+        <li>Works with any EHR or calendar</li>
+        <li>HIPAA-ready, BAA included</li>
+        <li>From $0 self-hosted</li>
+      </ul>
+    </div>
+
+    <figure class="book" aria-label="Example: a cancelled 10:00 appointment is filled from the waitlist">
+      <div class="book-head"><strong>Dr. Maya Lee · Tuesday</strong><span>appointment book</span></div>
+      <div class="book-rows">
+        <div class="t">9:00</div><div class="s"><div class="appt">Follow-up · J.K.<small>30 min · in person</small></div></div>
+        <div class="t">10:00</div>
+        <div class="s"><div class="hero-slot">
+          <div class="appt was">New patient eval · R.S.<small>60 min · in person</small></div>
+          <div class="appt open"><b>Open: cancelled 8:41 AM</b><small>Matching the waitlist…</small></div>
+          <div class="appt now"><b>Avery T. moved up</b><small>Acuity 5/5 · was waiting for Nov 11</small></div>
+        </div></div>
+        <div class="t">11:00</div><div class="s"><div class="appt">Med management · D.P.<small>30 min · telehealth</small></div></div>
+        <div class="t">12:00</div><div class="s"><div class="appt free">lunch</div></div>
+      </div>
+      <div class="sms" aria-hidden="true">
+        <span class="meta">Text to Avery · 8:41 AM</span>
+        <div class="bubble">Riverbend Health: Good news Avery, you've been booked into an earlier appointment: Tue at 10:00 AM with Dr. Maya Lee. Your Nov 11 appointment has been released.</div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section class="band sheet" id="problem">
+  <div class="wrap split">
+    <div class="section-head" style="margin:0">
+      <span class="eyebrow">The problem</span>
+      <h2>Your waitlist is a sticky note and a phone.</h2>
+      <p class="lede">Most practices fill cancellations by hand. By the time someone is reached, the slot has passed. Meanwhile new patients wait weeks for a first visit.</p>
+    </div>
+    <div style="display:grid; gap:2rem; min-width:0">
+      <ol class="timeline" aria-label="A typical cancellation, handled by hand">
+        <li><time>8:41</time><span>A patient cancels her 10:00 evaluation.</span></li>
+        <li><time>8:55</time><span>The front desk finds the waitlist and calls the first name. Voicemail.</span></li>
+        <li><time>9:05</time><span>Second call. That patient works until noon.</span></li>
+        <li><time>9:20</time><span>Third call is answered, but they can't get there by 10.</span></li>
+        <li class="lost"><time>10:00</time><span>The slot goes empty. The most urgent patient on the list was never called.</span></li>
+      </ol>
+      <div class="costs">
+        <div class="cost"><h3>Sicker patients wait just as long</h3><p>First-come lists ignore acuity. The patient who needs to be seen this week is treated like everyone else.</p></div>
+        <div class="cost"><h3>Every empty slot is lost revenue</h3><p>A provider's hour is the scarcest thing a practice has. Unfilled cancellations quietly cost thousands a month.</p></div>
+        <div class="cost"><h3>Existing tools don't fit</h3><p>Built-in EHR waitlists only work inside that EHR and offer first-come. Enterprise platforms are quote-only and take months to deploy.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>One cancellation in, one patient seen sooner out.</h2>
+      <p class="lede">Slotback watches for openings, picks the patient your clinicians would pick, and handles the outreach and the booking.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Patients join the waitlist</h3><p>From a link on your website or added by staff. They tick the days and times they could make on short notice and choose "book me automatically" or "ask me first".</p></li>
+      <li><h3>Clinicians set priority</h3><p>Acuity from 1 (routine) to 5 (urgent), plus pin or adjust anyone. Every ranking shows its reasons, so you can always see why a patient was chosen.</p></li>
+      <li><h3>A slot opens</h3><p>Slotback sees it in your calendar feed, FHIR server or HL7 interface, or when staff post it. Matching starts within seconds.</p></li>
+      <li><h3>The right patient gets it</h3><p>Booked at once if they opted in, or offered with a 30-minute hold. The booking is written to your EHR and the patient gets a text.</p></li>
+    </ol>
+    <div class="chain-note">
+      <div class="chain" aria-label="Chain fill example"><span class="o">Tue 10:00 opens</span><i>→</i><span>Avery moves up</span><i>→</i><span class="o">Nov 11 opens</span><i>→</i><span>Morgan moves up</span></div>
+      <p><strong>Chain fill.</strong> When a patient who already had a later appointment moves up, their old slot is offered to the next person automatically. One cancellation can bring several patients forward.</p>
+    </div>
+    <div class="cta-row" style="margin-top:2rem"><a class="btn" href="demo.html">Run it yourself in the live demo</a></div>
+  </div>
+</section>
+
+<section class="band sheet" id="works-with">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">No vendor lock-in</span>
+      <h2>Works with the system you already have.</h2>
+      <p class="lede">Slotback never becomes your system of record. It reads openings from whatever you use and writes bookings back. Switch EHRs and your waitlist comes with you.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th scope="col">Connection</th><th scope="col">How openings are found</th><th scope="col">How bookings are saved</th><th scope="col">Typical systems</th></tr></thead>
+        <tbody>
+          <tr><td>Calendar feed</td><td>Polls each provider's private iCal link and notices cancelled, deleted or moved visits</td><td>One-click task for the front desk, or a webhook</td><td>Google Calendar, Microsoft 365 / Outlook, Apple Calendar, EHRs that publish calendar feeds</td></tr>
+          <tr><td>FHIR R4</td><td>Reads free <code>Slot</code> resources on each provider's schedule</td><td>Creates an <code>Appointment</code> and cancels the one it replaces</td><td>Certified EHRs with FHIR scheduling access (availability varies by vendor and contract)</td></tr>
+          <tr><td>HL7 v2</td><td>Receives <code>SIU^S15</code> / <code>S17</code> cancellation messages</td><td>Webhook to your interface engine</td><td>Hospital and enterprise EHRs through Mirth, Rhapsody, Cloverleaf or similar</td></tr>
+          <tr><td>API &amp; webhooks</td><td><code>POST /api/v1/openings</code></td><td>Signed webhook with retries</td><td>Custom scripts, integration platforms, anything else</td></tr>
+          <tr><td>No integration</td><td>Staff post the opening in two clicks</td><td>One-click task for the front desk</td><td>Any practice, on day one</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="hipaa">
+  <div class="wrap assure">
+    <div style="display:grid; gap:1rem">
+      <span class="eyebrow">Is it HIPAA compliant?</span>
+      <p class="answer">Yes. Slotback is built for HIPAA, and we sign a BAA.</p>
+      <p class="lede">Self-host it and patient data never leaves your servers. Choose our hosted plan and you get a Business Associate Agreement, a dedicated encrypted instance, and a written list of exactly who touches your data.</p>
+      <div><a class="btn ghost" href="security.html">Read the security details</a></div>
+    </div>
+    <ul class="checklist">
+      <li><span><strong>Encrypted everywhere.</strong> AES-256-GCM encryption for every patient field at rest, TLS only in transit.</span></li>
+      <li><span><strong>Every access recorded.</strong> A tamper-evident, hash-chained audit log of who viewed or changed what, and when.</span></li>
+      <li><span><strong>Strong sign-in.</strong> Individual accounts, two-factor authentication, lockout after failed attempts, automatic logoff after 15 idle minutes.</span></li>
+      <li><span><strong>Minimum necessary.</strong> The matching engine never sees names or phone numbers. Optional minimal texts say only "you have an appointment update" plus a secure link.</span></li>
+      <li><span><strong>Data that expires.</strong> Identifiers of patients who left the waitlist are erased after a retention window you set.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="band sheet" id="pricing-teaser">
+  <div class="wrap split">
+    <div class="section-head" style="margin:0">
+      <span class="eyebrow">Pricing</span>
+      <h2>A price on the page, no sales call.</h2>
+      <p class="lede">Free to self-host. $49 per provider per month hosted, with the BAA, texts and setup included. No contracts and no setup fees for calendar-based setups.</p>
+      <div class="cta-row"><a class="btn" href="pricing.html">See plans &amp; savings calculator</a></div>
+    </div>
+    <div class="costs">
+      <div class="cost"><h3>One filled hour usually covers the month</h3><p>If a single cancellation per provider per month is filled that would otherwise sit empty, the plan has paid for itself. Run your own numbers in the calculator.</p></div>
+      <div class="cost"><h3>Live in a day</h3><p>Calendar-feed and manual setups take under an hour. EHR interfaces depend on your vendor's API approval; we tell you the timeline up front.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Questions</span><h2>What practices ask first</h2></div>
+    <div class="faq prose">
+      <details><summary>Does Slotback replace my EHR's scheduler?</summary><div><p>No. Your EHR or calendar stays the system of record. Slotback only reads openings and writes the bookings it makes back to it.</p></div></details>
+      <details><summary>Can a patient be booked without agreeing?</summary><div><p>Only if they chose "book me automatically" when they joined the waitlist. Everyone else gets an offer, held for them for a set time (30 minutes by default), and decides.</p></div></details>
+      <details><summary>What happens if two patients accept the same slot?</summary><div><p>For slots opening within the next day, Slotback can offer to a few patients at once. The first to accept gets it, and the others are told right away that it was filled and that they are still on the list.</p></div></details>
+      <details><summary>How do clinicians decide who goes first?</summary><div><p>Each patient has an acuity from 1 to 5 that the clinician sets. By default one acuity level outweighs everything else; within the same level, the patient who has waited longest or would be seen soonest goes first. Clinicians can pin a patient to the top or adjust their score, and the practice can change the weights.</p></div></details>
+      <details><summary>Do patients need an app or a password?</summary><div><p>No. They get a text or email with a secure single-purpose link, or they can reply YES or NO to the text.</p></div></details>
+      <details><summary>Will patients be texted in the middle of the night?</summary><div><p>No. Quiet hours (9 PM to 8 AM by default) hold messages until morning, and offers that need a reply wait too.</p></div></details>
+      <details><summary>Is it a crisis or triage tool?</summary><div><p>No. Slotback schedules routine and urgent-but-scheduled care. The patient form tells anyone in crisis to call or text 988 or call 911.</p></div></details>
+    </div>
+  </div>
+</section>
+
+</main>
+{{> footer}}
+</body>
+</html>
