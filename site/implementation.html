@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Slotback Setup Guide · Connect any EHR or calendar to an automatic waitlist</title>
+<meta name="description" content="How to set up Slotback: choose hosted or self-hosted, connect openings from a calendar feed, FHIR, HL7 or the API, choose how bookings are saved, turn on texting, and invite staff and patients. Most calendar-based setups go live the same day.">
+<link rel="canonical" href="{{SITE_URL}}/implementation.html">
+<meta property="og:title" content="Slotback setup guide">
+<meta property="og:description" content="From sign-up to the first filled cancellation: every step, for any EHR or calendar.">
+<meta property="og:url" content="{{SITE_URL}}/implementation.html">
+{{> head}}
+</head>
+<body>
+{{> header implementation}}
+<main id="main">
+  <div class="wrap page-hero">
+    <span class="eyebrow">Implementation</span>
+    <h1>From sign-up to the first filled cancellation.</h1>
+    <p class="lede">A practice using a calendar feed or posting openings by hand is usually live the same day. An EHR interface takes as long as your EHR vendor needs to grant API access. Here is every step.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th scope="col">Setup path</th><th scope="col">Your time</th><th scope="col">Typical elapsed time</th><th scope="col">What's automatic</th></tr></thead>
+        <tbody>
+          <tr><td>Manual openings</td><td>30 minutes</td><td>Same day</td><td>Matching, offers, holds, texts. Staff post openings and confirm bookings in two clicks.</td></tr>
+          <tr><td>Calendar feed</td><td>45 minutes</td><td>Same day</td><td>Everything above, plus cancellations detected automatically.</td></tr>
+          <tr><td>FHIR or HL7 interface</td><td>1–2 hours across a few calls</td><td>1–6 weeks, set by your EHR vendor</td><td>Everything, including writing bookings into the EHR.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="wrap doc">
+    <nav class="doc-nav" aria-label="On this page">
+      <a href="#hosting">1. Hosting</a>
+      <a href="#practice">2. Providers &amp; visit types</a>
+      <a href="#connect">3. Connect openings</a>
+      <a href="#bookings">4. Saving bookings</a>
+      <a href="#messages">5. Texts &amp; email</a>
+      <a href="#priorities">6. Priorities</a>
+      <a href="#staff">7. Staff accounts</a>
+      <a href="#patients">8. Patients</a>
+      <a href="#checklist">Go-live checklist</a>
+      <a href="#daily">Day to day</a>
+      <a href="#self-host">Self-hosting</a>
+    </nav>
+
+    <div class="doc-body prose">
+      <section id="hosting">
+        <h2>1. Choose hosted or self-hosted</h2>
+        <p><strong>Hosted:</strong> we sign a BAA, create a dedicated encrypted instance at an address like <code>waitlist.yourpractice.com</code>, and send your administrator a one-time setup link. <strong>Self-hosted:</strong> you run the same software with Docker on your own HIPAA-eligible infrastructure; see <a href="#self-host">self-hosting</a> below.</p>
+      </section>
+
+      <section id="practice">
+        <h2>2. Add providers, locations and visit types</h2>
+        <p>Under <em>Settings</em>, enter each provider, whether they see patients in person or by telehealth, your locations, and the visit types patients can wait for, each with a length (for example a 60-minute new-patient evaluation and a 30-minute medication follow-up). Set your time zone and the name that appears in texts. Behavioral health practices often use a neutral name.</p>
+      </section>
+
+      <section id="connect">
+        <h2>3. Connect where openings come from</h2>
+        <p>Pick one per provider. You can mix them, and you can start manual and add a connection later.</p>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Option</th><th scope="col">What you need</th><th scope="col">What happens</th></tr></thead>
+            <tbody>
+              <tr><td>Calendar feed</td><td>Each provider's private iCal/ICS subscription link. Google Calendar, Microsoft 365 / Outlook and Apple Calendar all provide one, and many EHRs and practice-management systems offer a calendar sync link.</td><td>Slotback checks the feed every 2 minutes. A visit that disappears, is marked cancelled, or moves frees its old time. It stores only event times and IDs, never titles. Feeds that suddenly empty are treated as an outage, not mass cancellations.</td></tr>
+              <tr><td>FHIR R4</td><td>FHIR API access with read on <code>Slot</code> and write on <code>Appointment</code> (backend client credentials or a token), plus each provider's <code>Schedule</code> and <code>Practitioner</code> IDs.</td><td>Free slots become openings automatically. Slots that stop being free are withdrawn from offers. Bookings are created as <code>Appointment</code> resources linked to the slot.</td></tr>
+              <tr><td>HL7 v2</td><td>An interface engine that can send <code>SIU</code> messages over HTTPS to <code>/api/v1/hl7</code> with an API key, and each provider's HL7 ID.</td><td><code>S15</code> and <code>S17</code> (cancel, delete) create openings. <code>S12</code> (new booking) withdraws an opening someone filled by phone. Every message gets an HL7 ACK.</td></tr>
+              <tr><td>API</td><td>An API key (Settings → API keys).</td><td><code>POST /api/v1/openings</code> with provider, start and end. Duplicates are recognized.</td></tr>
+              <tr><td>Manual</td><td>Nothing.</td><td>Staff post an opening in the dashboard: provider, date, time, length. Matching starts immediately.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="bookings">
+        <h2>4. Choose how bookings are saved</h2>
+        <ul>
+          <li><strong>Front-desk task</strong> (works everywhere): the patient is chosen and the slot is held; the task shows exactly what to enter. One click marks it done and sends the patient their confirmation.</li>
+          <li><strong>FHIR</strong>: Slotback creates the appointment in your EHR and cancels the one it replaces. If a patient isn't linked to an EHR record yet, it falls back to a task.</li>
+          <li><strong>Webhook</strong>: Slotback sends a signed request to your interface engine or script and accepts an immediate or later confirmation.</li>
+        </ul>
+        <p>Whichever you choose, nothing is double-booked: if the EHR reports the slot was taken in the meantime, the patient is told and stays on the waitlist.</p>
+      </section>
+
+      <section id="messages">
+        <h2>5. Turn on texts and email</h2>
+        <p>On the hosted plan, messaging is included and covered by our BAA. Self-hosted practices connect Twilio (sign Twilio's BAA and use a HIPAA-eligible configuration) and/or their own email provider over SMTP with TLS, such as Google Workspace or Microsoft 365 under their BAAs. Patients can reply YES or NO to an offer by text. Quiet hours (9 PM–8 AM by default) hold messages until morning.</p>
+        <p>Choose standard messages (date, time and clinician in the text) or minimal messages ("You have an appointment update" plus a secure link).</p>
+      </section>
+
+      <section id="priorities">
+        <h2>6. Set how patients are prioritized</h2>
+        <p>Clinicians set each patient's acuity from 1 to 5 and can pin or adjust anyone. Defaults: one acuity level is worth 50 points, more than all the other factors combined, so acuity decides and the other factors break ties. Waiting time adds 1 point a day (up to 20), having no appointment yet adds 10, and each day an opening would save adds 0.5 (up to 15). Each declined offer subtracts 5. All of it is adjustable, and every patient's score shows its breakdown.</p>
+        <p>Offers are held for 30 minutes by default. Slots opening within 24 hours are offered to the top three patients at once, first to accept wins. Patients who already have an appointment are only moved if the new slot is at least a day sooner.</p>
+      </section>
+
+      <section id="staff">
+        <h2>7. Invite your staff</h2>
+        <p>Create an account per person (admin, staff or provider). Each gets a one-time link to set a password and enroll an authenticator app. Shared logins are not supported because they break the audit trail.</p>
+      </section>
+
+      <section id="patients">
+        <h2>8. Bring patients onto the waitlist</h2>
+        <ul>
+          <li>Put the waitlist link (<code>/join</code>) on your website, in your phone-tree message and on appointment confirmations.</li>
+          <li>Staff can add patients during a call in about a minute.</li>
+          <li>Integrations can add patients through <code>POST /api/v1/entries</code>.</li>
+        </ul>
+        <p>Self-requests wait for staff review by default, so only your own patients are matched, and a clinician sets acuity before the patient is ranked.</p>
+      </section>
+
+      <section id="checklist">
+        <h2>Go-live checklist</h2>
+        <ol class="numbered">
+          <li><strong>BAA signed</strong> (hosted) or BAAs in place with your hosting, texting and email vendors (self-hosted).</li>
+          <li><strong>Providers, visit types and time zone</strong> match your EHR.</li>
+          <li><strong>One test opening</strong> posted for a staff member's phone number; offer received, accepted, task completed.</li>
+          <li><strong>Openings connection</strong> verified: cancel a test appointment and watch it appear in Slotback within two minutes.</li>
+          <li><strong>Staff accounts</strong> created, everyone signed in with two-factor.</li>
+          <li><strong>Waitlist link</strong> published and the front desk briefed on the Tasks page.</li>
+          <li><strong>Your risk analysis</strong> updated to include Slotback (we provide a description of controls for it).</li>
+        </ol>
+      </section>
+
+      <section id="daily">
+        <h2>Day to day</h2>
+        <p>The <em>Today</em> page shows openings being filled and who has been offered what. Front-desk staff approve new requests and, in task mode, mark bookings as entered. Clinicians adjust acuity as patients' needs change. Everything else runs by itself.</p>
+      </section>
+
+      <section id="self-host">
+        <h2>Self-hosting</h2>
+        <p>Slotback is one Node.js process with an embedded, encrypted SQLite database. Run it behind the included Caddy reverse proxy, which obtains TLS certificates automatically.</p>
+<pre><code># 1. Get the code and create a key (keep it in your secrets manager)
+git clone &lt;repository&gt; slotback &amp;&amp; cd slotback
+echo "SLOTBACK_ENCRYPTION_KEY=$(openssl rand -base64 32)" &gt; .env
+echo "SLOTBACK_DOMAIN=waitlist.yourpractice.com" &gt;&gt; .env
+
+# 2. Start it (Caddy + Slotback)
+docker compose up -d
+
+# 3. Create the first administrator and open the link it prints
+docker compose exec app node src/server/cli.ts create-user admin --role admin</code></pre>
+        <p>Then add texting, email and EHR settings from <code>.env.example</code>. Back up the <code>data</code> volume and your encryption key separately; one without the other is useless to an attacker and to you. To try it locally first with made-up data, run <code>npm install &amp;&amp; npm run demo</code>.</p>
+        <p class="callout"><strong>Self-hosting makes you responsible</strong> for the server's security: operating-system updates, disk encryption, firewalling, backups, and BAAs with your cloud, texting and email providers. If that's not something you do today, the hosted plan includes all of it.</p>
+      </section>
+    </div>
+  </div>
+</main>
+{{> footer}}
+</body>
+</html>

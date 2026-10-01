@@ -1,0 +1,11 @@
+node_modules
+data
+_site
+site
+test
+docs
+.git
+.github
+*.db
+*.db-*
+.env

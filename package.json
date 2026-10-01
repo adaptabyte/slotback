@@ -1,0 +1,29 @@
+{
+  "name": "slotback",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HIPAA-ready waitlist and cancellation backfill for medical and psychiatric practices. Works with any EHR or calendar.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server/main.ts",
+    "dev": "SLOTBACK_ENV=development node --disable-warning=ExperimentalWarning --watch src/server/main.ts",
+    "demo": "SLOTBACK_ENV=development SLOTBACK_SEED_DEMO=1 node --disable-warning=ExperimentalWarning src/server/main.ts",
+    "cli": "node --disable-warning=ExperimentalWarning src/server/cli.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json",
+    "build:site": "node scripts/build-site.mjs",
+    "check": "npm run typecheck && npm test && npm run build:site"
+  },
+  "dependencies": {
+    "nodemailer": "^10.0.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/nodemailer": "^8.0.2",
+    "esbuild": "^0.28.0",
+    "typescript": "^5.9.0"
+  }
+}

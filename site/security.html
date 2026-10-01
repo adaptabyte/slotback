@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Is Slotback HIPAA Compliant? · Security, BAA and safeguards</title>
+<meta name="description" content="Yes. Slotback is built for HIPAA compliance and signs a Business Associate Agreement. See every safeguard mapped to the HIPAA Security Rule: encryption, audit logs, two-factor sign-in, automatic logoff, minimum-necessary messaging and data retention.">
+<link rel="canonical" href="{{SITE_URL}}/security.html">
+<meta property="og:title" content="Is Slotback HIPAA compliant? Yes, here's exactly how.">
+<meta property="og:description" content="Every HIPAA technical safeguard, the BAA, and who is responsible for what.">
+<meta property="og:url" content="{{SITE_URL}}/security.html">
+{{> head}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Is Slotback HIPAA compliant?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Slotback implements the HIPAA Security Rule's technical safeguards (encryption, audit controls, integrity, authentication, transmission security) and we sign a Business Associate Agreement on hosted plans. Self-hosted, patient data never reaches us." } },
+    { "@type": "Question", "name": "Will you sign a BAA?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every hosted plan includes a signed Business Associate Agreement before any patient data is entered." } },
+    { "@type": "Question", "name": "Is there such a thing as HIPAA-certified software?", "acceptedAnswer": { "@type": "Answer", "text": "No. HHS does not certify software. Compliance comes from safeguards in the software plus a BAA and the practice's own policies. Be wary of any vendor claiming HIPAA certification." } }
+  ]
+}
+</script>
+</head>
+<body>
+{{> header security}}
+<main id="main">
+  <div class="wrap page-hero">
+    <span class="eyebrow">HIPAA &amp; security</span>
+    <h1>Is Slotback HIPAA compliant? <span class="mark">Yes.</span></h1>
+    <p class="lede">Slotback was designed for protected health information from the first line of code. We sign a Business Associate Agreement on every hosted plan, and if you self-host, your patients' data never reaches us at all. Below is exactly what that means, safeguard by safeguard.</p>
+  </div>
+
+  <div class="wrap doc">
+    <nav class="doc-nav" aria-label="On this page">
+      <a href="#certified">No "HIPAA certified"</a>
+      <a href="#safeguards">Technical safeguards</a>
+      <a href="#minimum">Minimum necessary</a>
+      <a href="#messages">Texts and email</a>
+      <a href="#lifecycle">Data lifecycle</a>
+      <a href="#baa">The BAA</a>
+      <a href="#shared">Who does what</a>
+      <a href="#hosting">Hosted infrastructure</a>
+      <a href="#report">Reporting a problem</a>
+    </nav>
+
+    <div class="doc-body prose">
+      <section id="certified">
+        <h2>Why we don't say "HIPAA certified"</h2>
+        <p>The U.S. Department of Health and Human Services does not certify software, and no official HIPAA certification exists. A practice is HIPAA compliant when its own policies, its vendors' safeguards, and Business Associate Agreements work together. Our part is to build the safeguards in, sign the BAA, and be precise about what we cover. Treat any vendor that calls itself "HIPAA certified" with suspicion.</p>
+      </section>
+
+      <section id="safeguards">
+        <h2>Technical safeguards, mapped to the Security Rule</h2>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Requirement</th><th scope="col">How Slotback meets it</th></tr></thead>
+            <tbody>
+              <tr><td>Unique user identification <span class="reg">§164.312(a)(2)(i)</span></td><td>Every staff member has an individual account with a role (admin, staff, provider). Shared logins are not possible because accounts are created by invitation for a named person.</td></tr>
+              <tr><td>Automatic logoff <span class="reg">§164.312(a)(2)(iii)</span></td><td>Sessions end after 15 minutes of inactivity and after 12 hours regardless of activity. Both limits are configurable.</td></tr>
+              <tr><td>Encryption and decryption <span class="reg">§164.312(a)(2)(iv)</span></td><td>Patient names, dates of birth, contact details, EHR identifiers and every waitlist record are encrypted field by field with AES-256-GCM before they reach the database. Each value is bound to its record, so ciphertext cannot be moved between patients. Phone numbers are looked up through keyed hashes, not plaintext.</td></tr>
+              <tr><td>Audit controls <span class="reg">§164.312(b)</span></td><td>Every sign-in, every view of a patient record, every change and every automated decision is written to an append-only audit log. Each entry includes the hash of the one before it, and the database rejects edits and deletions, so any tampering is detectable. Administrators can verify the chain from the dashboard.</td></tr>
+              <tr><td>Integrity <span class="reg">§164.312(c)(1)</span></td><td>Authenticated encryption detects any modification of stored patient data. State changes, audit entries and outgoing actions are committed in one database transaction, so a crash can't leave a booking half-made.</td></tr>
+              <tr><td>Person or entity authentication <span class="reg">§164.312(d)</span></td><td>Passwords of at least 12 characters, stored as salted scrypt hashes. Two-factor authentication with any authenticator app is required in production. Accounts lock for 15 minutes after five failed attempts. Integrations authenticate with revocable API keys, stored only as hashes.</td></tr>
+              <tr><td>Transmission security <span class="reg">§164.312(e)(1)</span></td><td>HTTPS only, with HSTS. In production Slotback refuses to start if its address or any integration endpoint is not HTTPS. Outgoing webhooks are signed so the receiver can verify them, and email requires TLS.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Web pages that show patient data also carry a strict content security policy, are never cached, never leak links through the Referer header, load no third-party scripts, and cannot be embedded in other sites.</p>
+      </section>
+
+      <section id="minimum">
+        <h2>Minimum necessary, by design</h2>
+        <ul>
+          <li>The matching engine works on scheduling preferences and opaque IDs. It never sees a name, phone number or diagnosis.</li>
+          <li>Slotback stores no diagnoses, notes or clinical content. Acuity is a number from 1 to 5; the reasoning behind it stays in your EHR.</li>
+          <li>Calendar feeds are read for event times and IDs only. Event titles, which often contain patient names, are never stored.</li>
+          <li>Writing a booking to your EHR sends only what the EHR needs to find the chart: EHR patient ID, name and date of birth.</li>
+        </ul>
+      </section>
+
+      <section id="messages">
+        <h2>Texts and email to patients</h2>
+        <p>HIPAA permits appointment communications to patients by text and email with reasonable safeguards, and patients choose their channel and consent to texts when they join. Two message styles are available:</p>
+        <ul>
+          <li><strong>Standard:</strong> "Riverbend Health: an earlier appointment opened up: Tue, Oct 7 at 2:00 PM with Dr. Lee. Accept or decline: [link]"</li>
+          <li><strong>Minimal:</strong> "Riverbend Health: You have a time-sensitive appointment update. View it securely: [link]". Recommended for behavioral health, where even the clinic's name can be sensitive. You can also set a neutral sender name.</li>
+        </ul>
+        <p>Links are single-purpose and unguessable, expire automatically, and are stored only as hashes. They let a patient accept, decline, pause or leave, and nothing else.</p>
+      </section>
+
+      <section id="lifecycle">
+        <h2>What is stored, and for how long</h2>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Data</th><th scope="col">Why</th><th scope="col">Retention</th></tr></thead>
+            <tbody>
+              <tr><td>Name, date of birth, phone, email, EHR ID</td><td>To contact the patient and find their chart</td><td>Erased automatically 90 days (configurable) after the patient leaves the waitlist or is booked</td></tr>
+              <tr><td>Availability, visit type, acuity</td><td>To match openings</td><td>Kept with the encrypted waitlist record; no longer tied to a person once identifiers are erased</td></tr>
+              <tr><td>Openings, offers, bookings</td><td>To run and explain the schedule</td><td>Kept for reporting; contain IDs only</td></tr>
+              <tr><td>Audit log</td><td>Accountability</td><td>Never deleted by the application. HIPAA requires at least six years for compliance documentation.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="baa">
+        <h2>The Business Associate Agreement</h2>
+        <p>On every hosted plan we sign a BAA before any patient data is entered. It covers permitted uses (only providing the service to you), safeguards, subcontractors who also sign BAAs with us, breach notification without unreasonable delay and within the time HIPAA requires, your right to access and export data, and return or destruction of data when you leave.</p>
+        <p>Self-hosted practices don't need a BAA with us because we never receive or store their patients' information. They need BAAs with their own hosting, texting and email providers.</p>
+      </section>
+
+      <section id="shared">
+        <h2>Who is responsible for what</h2>
+        <div class="table-wrap">
+          <table class="data">
+            <thead><tr><th scope="col">Area</th><th scope="col">Hosted plan</th><th scope="col">Self-hosted</th></tr></thead>
+            <tbody>
+              <tr><td>Application safeguards above</td><td>Slotback</td><td>Slotback (built into the software)</td></tr>
+              <tr><td>Servers, patching, disk encryption, backups</td><td>Slotback</td><td>Your practice or IT partner</td></tr>
+              <tr><td>BAAs with hosting, texting and email vendors</td><td>Slotback</td><td>Your practice</td></tr>
+              <tr><td>Who gets an account and with what role</td><td>Your practice</td><td>Your practice</td></tr>
+              <tr><td>Workforce training, risk analysis, patient consent policy</td><td>Your practice (we supply a controls description)</td><td>Your practice</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="hosting">
+        <h2>Hosted infrastructure</h2>
+        <p>Each practice gets its own application instance and its own database, encrypted with its own key. Instances run on HIPAA-eligible cloud infrastructure covered by a BAA with our provider, with encrypted disks and encrypted, access-controlled backups. Our staff access production only to support you, with individual named accounts and two-factor authentication, and that access is logged. The current list of subcontractors is included with the BAA.</p>
+      </section>
+
+      <section id="report">
+        <h2>Reporting a security problem</h2>
+        <p>Email <a href="mailto:{{SECURITY_EMAIL}}">{{SECURITY_EMAIL}}</a>. We acknowledge reports within two business days and won't pursue good-faith researchers. The source code is available, so you can review exactly how every safeguard on this page is built, and its automated tests check encryption, audit-chain tamper detection, authentication and access control.</p>
+      </section>
+    </div>
+  </div>
+</main>
+{{> footer}}
+</body>
+</html>
